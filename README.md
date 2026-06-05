@@ -1,2 +1,937 @@
 # FUTURE_PE_01
 Brew Haven Café – A modern, responsive café website built with HTML, CSS, and JavaScript featuring elegant UI, menu showcase, customer reviews, reservation section, and premium coffee-shop branding.  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brew Haven Café — Artisan Coffee, Chennai</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#fdf6ec;
+  --espresso:#1c0f07;
+  --mocha:#3d1f0d;
+  --latte:#c8956b;
+  --caramel:#e8a45a;
+  --foam:#f5ede0;
+  --steam:#f9f3eb;
+  --text:#2a1508;
+  --muted:#8a6a52;
+  --border:#e2d4c0;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1000;
+  opacity:0.6;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 4rem;
+  background:rgba(253,246,236,0.88);
+  backdrop-filter:blur(12px);
+  border-bottom:0.5px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;
+  color:var(--espresso);
+  letter-spacing:0.02em;
+}
+.nav-logo span{color:var(--latte);font-style:italic}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-size:13px;font-weight:500;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--muted);
+  text-decoration:none;transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--espresso)}
+.nav-cta{
+  padding:9px 22px;
+  background:var(--espresso);color:var(--cream);
+  border:none;border-radius:3px;
+  font-family:'Jost',sans-serif;font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;text-decoration:none;
+}
+.nav-cta:hover{background:var(--mocha)}
+
+/* ── AI BADGE ── */
+.ai-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;
+  background:rgba(200,149,107,0.12);
+  border:0.5px solid rgba(200,149,107,0.4);
+  border-radius:20px;
+  font-size:10px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--latte);
+  margin-bottom:1.5rem;
+}
+.ai-dot{width:6px;height:6px;background:var(--caramel);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
+
+/* ── HERO ── */
+#home{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-top:90px;
+  position:relative;
+}
+.hero-left{
+  padding:6rem 4rem 4rem;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;
+}
+.hero-right{
+  background:var(--mocha);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-right-inner{
+  width:100%;height:100%;
+  background:linear-gradient(135deg,#2a1205 0%,#5c2e14 40%,#3d1f0d 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem;
+  position:relative;
+}
+/* Coffee cup SVG art */
+.coffee-art{
+  width:180px;height:180px;margin-bottom:2rem;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.steam-line{
+  position:absolute;top:calc(50% - 120px);
+  width:3px;background:rgba(255,255,255,0.12);border-radius:3px;
+  animation:steam 3s ease-in-out infinite;
+}
+.steam-line:nth-child(1){left:calc(50% - 20px);height:40px;animation-delay:0s}
+.steam-line:nth-child(2){left:50%;height:55px;animation-delay:0.4s}
+.steam-line:nth-child(3){left:calc(50% + 20px);height:35px;animation-delay:0.8s}
+@keyframes steam{0%,100%{opacity:0;transform:translateY(0) scaleX(1)}50%{opacity:1;transform:translateY(-20px) scaleX(1.3)}}
+.hero-tag{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:14px;color:rgba(200,149,107,0.8);
+  margin-bottom:0.5rem;letter-spacing:0.05em;
+}
+.hero-h1{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(42px,5vw,72px);
+  font-weight:700;line-height:1.05;
+  color:var(--espresso);
+  margin-bottom:1.5rem;
+}
+.hero-h1 em{font-style:italic;color:var(--latte)}
+.hero-sub{
+  font-size:17px;font-weight:300;line-height:1.8;
+  color:var(--muted);max-width:420px;
+  margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;align-items:center}
+.btn-primary{
+  padding:14px 32px;
+  background:var(--espresso);color:var(--cream);
+  border:none;border-radius:3px;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.25s;text-decoration:none;display:inline-block;
+}
+.btn-primary:hover{background:var(--mocha);transform:translateY(-2px)}
+.btn-ghost{
+  padding:14px 28px;border:1px solid var(--border);
+  background:none;color:var(--text);
+  border-radius:3px;font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:500;letter-spacing:0.06em;
+  text-transform:uppercase;cursor:pointer;transition:all 0.25s;
+  text-decoration:none;display:inline-block;
+}
+.btn-ghost:hover{border-color:var(--latte);color:var(--latte)}
+
+.hero-stats{
+  display:flex;gap:3rem;margin-top:4rem;
+  padding-top:2rem;border-top:0.5px solid var(--border);
+}
+.stat-n{font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;color:var(--espresso)}
+.stat-l{font-size:12px;color:var(--muted);letter-spacing:0.05em;margin-top:2px}
+
+/* ── SECTIONS COMMON ── */
+section{padding:7rem 4rem}
+.section-tag{
+  font-size:11px;font-weight:600;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--latte);
+  margin-bottom:1rem;display:block;
+}
+.section-h{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(32px,4vw,52px);
+  font-weight:700;line-height:1.15;
+  color:var(--espresso);margin-bottom:1.5rem;
+}
+.section-h em{font-style:italic;color:var(--latte)}
+.section-sub{
+  font-size:16px;font-weight:300;line-height:1.9;
+  color:var(--muted);max-width:560px;
+}
+
+/* ── AI CONTENT BOX ── */
+.ai-content-box{
+  background:var(--foam);
+  border:0.5px solid var(--border);
+  border-radius:8px;
+  padding:2rem;
+  margin-top:2rem;
+  position:relative;
+  min-height:80px;
+}
+.ai-content-box::before{
+  content:'✦ AI Generated';
+  position:absolute;top:-10px;left:16px;
+  background:var(--foam);
+  font-size:9px;font-weight:600;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--latte);
+  padding:0 8px;
+}
+.ai-text{
+  font-size:15px;line-height:1.9;color:var(--text);
+  font-weight:300;white-space:pre-line;
+}
+.ai-loader{
+  display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;
+}
+.dots span{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--caramel);margin:0 2px;
+  animation:bounce 1.2s infinite;
+}
+.dots span:nth-child(2){animation-delay:0.2s}
+.dots span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ── ABOUT (home continued) ── */
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+  background:var(--steam);
+  margin:0 -4rem;padding:7rem 4rem;
+}
+.about-img-block{
+  position:relative;height:460px;
+  background:linear-gradient(160deg,#3d1f0d,#6b3318);
+  border-radius:4px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.about-img-inner{
+  font-family:'Playfair Display',serif;
+  font-size:120px;opacity:0.15;color:var(--cream);
+}
+.about-badge{
+  position:absolute;bottom:2rem;right:-1.5rem;
+  background:var(--caramel);color:var(--espresso);
+  padding:1.25rem 1.5rem;border-radius:4px;
+  font-family:'Libre Baskerville',serif;
+  font-size:28px;font-weight:700;text-align:center;
+}
+.about-badge small{display:block;font-size:11px;font-weight:400;font-family:'Jost',sans-serif;letter-spacing:0.08em;margin-top:2px}
+
+/* ── SERVICES ── */
+#services{background:var(--espresso)}
+#services .section-tag{color:var(--caramel)}
+#services .section-h{color:var(--cream)}
+#services .section-sub{color:rgba(253,246,236,0.55)}
+
+.services-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5px;margin-top:4rem;
+  border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:6px;overflow:hidden;
+}
+.service-card{
+  background:rgba(255,255,255,0.04);
+  padding:2.5rem 2rem;
+  transition:background 0.3s;
+  position:relative;overflow:hidden;
+}
+.service-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:var(--caramel);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.35s ease;
+}
+.service-card:hover::after{transform:scaleX(1)}
+.service-card:hover{background:rgba(255,255,255,0.07)}
+.service-icon{
+  font-size:32px;margin-bottom:1.25rem;display:block;
+}
+.service-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:20px;color:var(--cream);
+  margin-bottom:0.75rem;font-weight:700;
+}
+.service-desc{
+  font-size:14px;font-weight:300;line-height:1.8;
+  color:rgba(253,246,236,0.5);margin-bottom:1.25rem;
+}
+.service-price{
+  font-family:'Libre Baskerville',serif;
+  font-size:13px;color:var(--caramel);
+  letter-spacing:0.05em;
+}
+
+.services-ai-note{
+  margin-top:3rem;
+  padding:1.5rem 2rem;
+  background:rgba(255,255,255,0.04);
+  border:0.5px solid rgba(232,164,90,0.25);
+  border-radius:6px;
+}
+.services-ai-note .ai-text{color:rgba(253,246,236,0.75)}
+
+/* ── WHY US ── */
+.why-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
+  margin-top:4rem;
+}
+.why-card{
+  padding:2rem 1.5rem;
+  border:0.5px solid var(--border);
+  border-radius:6px;background:var(--foam);
+  transition:all 0.25s;
+}
+.why-card:hover{border-color:var(--latte);transform:translateY(-4px)}
+.why-num{
+  font-family:'Libre Baskerville',serif;
+  font-size:42px;font-weight:700;color:var(--caramel);
+  opacity:0.4;margin-bottom:0.75rem;line-height:1;
+}
+.why-title{font-size:15px;font-weight:600;color:var(--espresso);margin-bottom:0.5rem}
+.why-desc{font-size:13px;font-weight:300;line-height:1.7;color:var(--muted)}
+
+/* ── TESTIMONIAL ── */
+.testimonial-section{
+  background:var(--foam);
+  margin:0 -4rem;padding:6rem 4rem;
+  text-align:center;
+}
+.testimonial-quote{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(22px,3vw,36px);font-style:italic;
+  color:var(--espresso);line-height:1.5;
+  max-width:780px;margin:1.5rem auto;
+}
+.testimonial-author{
+  font-size:13px;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--muted);margin-top:1.5rem;
+}
+.stars{color:var(--caramel);font-size:20px;letter-spacing:4px;margin-top:1rem}
+
+/* ── CTA ── */
+#cta{
+  background:var(--mocha);
+  text-align:center;position:relative;overflow:hidden;
+}
+#cta::before{
+  content:'';position:absolute;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:rgba(200,149,107,0.06);
+  top:-200px;left:50%;transform:translateX(-50%);
+}
+#cta .section-h{color:var(--cream);position:relative}
+#cta .section-sub{color:rgba(253,246,236,0.5);margin:0 auto 3rem;position:relative;text-align:center;max-width:520px}
+#cta .section-tag{text-align:center;display:block;position:relative}
+
+.cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-gold{
+  padding:16px 36px;
+  background:var(--caramel);color:var(--espresso);
+  border:none;border-radius:3px;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.25s;text-decoration:none;display:inline-block;
+}
+.btn-gold:hover{background:#f0b870;transform:translateY(-2px)}
+.btn-outline-light{
+  padding:16px 32px;
+  border:1px solid rgba(253,246,236,0.25);
+  background:none;color:var(--cream);
+  border-radius:3px;font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:500;letter-spacing:0.06em;
+  text-transform:uppercase;cursor:pointer;transition:all 0.25s;
+  text-decoration:none;display:inline-block;
+}
+.btn-outline-light:hover{border-color:var(--caramel);color:var(--caramel)}
+
+.cta-ai-box{
+  background:rgba(255,255,255,0.05);
+  border:0.5px solid rgba(232,164,90,0.2);
+  border-radius:8px;padding:2rem;
+  margin:3rem auto 0;max-width:680px;position:relative;
+}
+.cta-ai-box .ai-text{color:rgba(253,246,236,0.75)}
+.cta-ai-box::before{
+  content:'✦ AI Generated CTA';
+  position:absolute;top:-10px;left:16px;
+  background:var(--mocha);
+  font-size:9px;font-weight:600;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--caramel);padding:0 8px;
+}
+
+/* ── FORM ── */
+.booking-form{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+  margin-top:2.5rem;max-width:560px;
+}
+.booking-form input,.booking-form select{
+  padding:12px 16px;
+  background:rgba(255,255,255,0.06);
+  border:0.5px solid rgba(255,255,255,0.15);
+  border-radius:4px;color:var(--cream);
+  font-family:'Jost',sans-serif;font-size:14px;
+  outline:none;transition:border-color 0.2s;
+}
+.booking-form input::placeholder{color:rgba(255,255,255,0.3)}
+.booking-form input:focus,.booking-form select:focus{border-color:rgba(232,164,90,0.6)}
+.booking-form select option{background:var(--mocha)}
+.booking-form .btn-gold{grid-column:1/-1;margin-top:0.5rem}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--espresso);padding:3rem 4rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:0.5px solid rgba(255,255,255,0.08);
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:18px;color:var(--cream);
+}
+.footer-logo span{color:var(--latte);font-style:italic}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{font-size:12px;color:rgba(253,246,236,0.35);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s}
+.footer-links a:hover{color:var(--caramel)}
+.footer-copy{font-size:11px;color:rgba(253,246,236,0.25);letter-spacing:0.04em}
+
+/* ── PAGE FADE IN ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.7s ease forwards;opacity:0}
+.fd1{animation-delay:0.1s}.fd2{animation-delay:0.25s}.fd3{animation-delay:0.4s}.fd4{animation-delay:0.55s}
+
+/* ── HOMEPAGE STORY ── */
+.homepage-story{
+  background:var(--steam);
+  border-top:0.5px solid var(--border);
+  padding:6rem 4rem;
+}
+.story-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;max-width:1200px;margin:0 auto;
+}
+.story-heading{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:700;line-height:1.15;
+  color:var(--espresso);margin-bottom:1.75rem;
+}
+.story-heading em{font-style:italic;color:var(--latte)}
+.story-body{
+  font-size:16px;font-weight:300;line-height:1.95;
+  color:var(--muted);margin-bottom:1.25rem;
+}
+.story-pillars{
+  display:flex;flex-direction:column;gap:1.5rem;
+  padding-top:3.5rem;
+}
+.story-pillar{
+  display:flex;gap:1.25rem;align-items:flex-start;
+  padding:1.5rem;
+  background:var(--foam);
+  border:0.5px solid var(--border);
+  border-radius:6px;
+  transition:all 0.25s;
+}
+.story-pillar:hover{border-color:var(--latte);transform:translateX(4px)}
+.pillar-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.pillar-title{font-size:15px;font-weight:600;color:var(--espresso);margin-bottom:4px}
+.pillar-desc{font-size:13px;font-weight:300;line-height:1.7;color:var(--muted)}
+
+/* ── REVIEWS ── */
+.reviews-section{
+  background:var(--cream);
+  padding:6rem 4rem;
+}
+.reviews-rating-bar{
+  display:flex;align-items:center;gap:1.25rem;
+  justify-content:center;margin:1.5rem 0 3.5rem;
+}
+.reviews-big-rating{
+  font-family:'Libre Baskerville',serif;
+  font-size:64px;font-weight:700;color:var(--espresso);line-height:1;
+}
+.stars-row{color:var(--caramel);font-size:22px;letter-spacing:4px}
+.reviews-count{font-size:12px;color:var(--muted);letter-spacing:0.04em;margin-top:4px}
+.reviews-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  max-width:1100px;margin:0 auto;
+}
+.review-card{
+  background:var(--foam);
+  border:0.5px solid var(--border);
+  border-radius:8px;padding:2rem;
+  transition:all 0.25s;
+}
+.review-card:hover{border-color:var(--latte);transform:translateY(-4px);box-shadow:0 12px 32px rgba(61,31,13,0.08)}
+.review-stars{color:var(--caramel);font-size:16px;letter-spacing:3px;margin-bottom:1rem}
+.review-text{
+  font-family:'Libre Baskerville',serif;
+  font-style:italic;font-size:14px;line-height:1.85;
+  color:var(--text);margin-bottom:1.5rem;
+}
+.review-author{display:flex;align-items:center;gap:0.75rem}
+.review-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--mocha);color:var(--caramel);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;
+  flex-shrink:0;
+}
+.review-name{font-size:13px;font-weight:600;color:var(--espresso)}
+.review-meta{font-size:11px;color:var(--muted);letter-spacing:0.03em;margin-top:2px}
+.reviews-cta-note{
+  text-align:center;margin-top:3rem;
+}
+
+/* ── CTA HIGHLIGHTS ── */
+.cta-highlights{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;margin:2.5rem auto 0;
+  max-width:780px;
+  background:rgba(255,255,255,0.05);
+  border:0.5px solid rgba(232,164,90,0.2);
+  border-radius:8px;overflow:hidden;
+  position:relative;
+}
+.cta-highlight-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:1.75rem 1.5rem;gap:0.6rem;
+}
+.cta-hi-icon{font-size:22px}
+.cta-hi-label{
+  font-size:13px;font-weight:300;line-height:1.6;
+  color:rgba(253,246,236,0.65);
+}
+.cta-highlight-divider{
+  width:0.5px;background:rgba(232,164,90,0.2);
+  align-self:stretch;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:1rem 2rem}
+  .nav-links{display:none}
+  #home{grid-template-columns:1fr;min-height:auto}
+  .hero-right{display:none}
+  .hero-left{padding:4rem 2rem}
+  section{padding:5rem 2rem}
+  .about-grid{grid-template-columns:1fr;margin:0 -2rem;padding:5rem 2rem}
+  .services-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .booking-form{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
+  .homepage-story{padding:4rem 2rem}
+  .story-inner{grid-template-columns:1fr;gap:3rem}
+  .reviews-section{padding:4rem 2rem}
+  .reviews-grid{grid-template-columns:1fr}
+  .cta-highlights{flex-direction:column;border-radius:8px}
+  .cta-highlight-divider{width:100%;height:0.5px;align-self:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Brew <span>Haven</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Menu & Services</a></li>
+    <li><a href="#why">Our Story</a></li>
+    <li><a href="#cta">Visit Us</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Reserve a Table</a>
+</nav>
+
+<!-- HOME -->
+<section id="home" style="padding:0">
+  <div class="hero-left">
+    <p class="hero-tag fade-up fd1">Est. 2019 · Artisan Coffee</p>
+    <h1 class="hero-h1 fade-up fd2" id="hero-h1">Where Every Cup<br>Tells a <em>Story</em></h1>
+    <p class="hero-sub fade-up fd3" id="hero-sub">Single-origin beans, SCA-trained baristas, and a corner table that always feels like yours.</p>
+    <div class="hero-actions fade-up fd4">
+      <a href="#services" class="btn-primary">Explore Our Menu</a>
+      <a href="#cta" class="btn-ghost">Book a Table</a>
+    </div>
+    <div class="hero-stats fade-up fd4">
+      <div><div class="stat-n">12+</div><div class="stat-l">Signature Blends</div></div>
+      <div><div class="stat-n">4.9★</div><div class="stat-l">Google Rating</div></div>
+      <div><div class="stat-n">8am</div><div class="stat-l">Opens Daily</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+    <div class="hero-right-inner">
+      <svg class="coffee-art" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="90" cy="148" rx="50" ry="8" fill="rgba(200,149,107,0.2)"/>
+        <rect x="30" y="70" width="100" height="75" rx="12" fill="rgba(200,149,107,0.15)" stroke="rgba(200,149,107,0.4)" stroke-width="1.5"/>
+        <path d="M130 88 Q148 88 148 105 Q148 122 130 122" stroke="rgba(200,149,107,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="80" cy="70" rx="50" ry="10" fill="rgba(232,164,90,0.25)"/>
+        <ellipse cx="80" cy="70" rx="35" ry="7" fill="rgba(232,164,90,0.4)"/>
+        <ellipse cx="80" cy="70" rx="20" ry="4" fill="rgba(200,149,107,0.6)"/>
+        <path d="M65 48 Q68 38 72 48" stroke="rgba(253,246,236,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M78 42 Q82 28 86 42" stroke="rgba(253,246,236,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M91 48 Q94 38 98 48" stroke="rgba(253,246,236,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <text x="90" y="116" text-anchor="middle" font-family="serif" font-size="11" fill="rgba(253,246,236,0.35)" letter-spacing="3">BREW HAVEN</text>
+      </svg>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(253,246,236,0.4);font-size:14px;text-align:center">Handcrafted with love,<br>served with warmth</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOMEPAGE STORY -->
+<div class="homepage-story">
+  <div class="story-inner">
+    <div class="story-text-block">
+      <span class="section-tag">Our Promise to You</span>
+      <h2 class="story-heading">A Cup That Remembers<br>Your <em>Name</em></h2>
+      <p class="story-body">Brew Haven was born from a single conviction — that a great cup of coffee is never just coffee. It's the pause between two meetings. The warmth on a rainy morning. The corner table where an idea becomes a plan.</p>
+      <p class="story-body">We source every bean with intention — from the misty slopes of Coorg, the valleys of Araku, the estates of Chikmagalur — and put them in the hands of SCA-trained baristas who treat extraction like an art form.</p>
+      <p class="story-body">Whether you're here for your third double-shot this week or stepping in for the very first time, you'll find the same thing: a space that feels like it was made for you.</p>
+    </div>
+    <div class="story-pillars">
+      <div class="story-pillar">
+        <div class="pillar-icon">🌱</div>
+        <div class="pillar-title">Farm to Cup</div>
+        <div class="pillar-desc">Direct relationships with Indian estates. Every bean traced, every farmer known.</div>
+      </div>
+      <div class="story-pillar">
+        <div class="pillar-icon">🏅</div>
+        <div class="pillar-title">SCA Certified</div>
+        <div class="pillar-desc">Our baristas train to global standards so every pour is consistent and deliberate.</div>
+      </div>
+      <div class="story-pillar">
+        <div class="pillar-icon">🤝</div>
+        <div class="pillar-title">Community Rooted</div>
+        <div class="pillar-desc">Local artists, open-mic nights, reading groups — we're more than a café, we're a gathering place.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="about-grid" id="why">
+  <div class="about-img-block">
+    <div class="about-img-inner">☕</div>
+    <div class="about-badge">15 <small>Years of<br>Craft</small></div>
+  </div>
+  <div>
+    <span class="section-tag">Our Story</span>
+    <h2 class="section-h">More Than<br>a <em>Coffee Shop</em></h2>
+    <div class="ai-content-box">
+      <div class="ai-loader" id="about-loader">
+        <div class="dots"><span></span><span></span><span></span></div>
+        Writing your story...
+      </div>
+      <p class="ai-text" id="about-ai-text" style="display:none"></p>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <span class="section-tag">Menu & Offerings</span>
+  <h2 class="section-h" style="color:var(--cream)">Crafted for Every<br><em>Moment</em></h2>
+  <p class="section-sub">From your first morning espresso to a slow afternoon pastry — we have a corner for every craving.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-icon">☕</span>
+      <h3 class="service-title" id="svc1-title">Signature Espresso Bar</h3>
+      <p class="service-desc" id="svc1-desc">Loading...</p>
+      <span class="service-price">From ₹120</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🥐</span>
+      <h3 class="service-title" id="svc2-title">Artisan Bakery</h3>
+      <p class="service-desc" id="svc2-desc">Loading...</p>
+      <span class="service-price">From ₹80</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🍵</span>
+      <h3 class="service-title" id="svc3-title">Tea & Wellness Drinks</h3>
+      <p class="service-desc" id="svc3-desc">Loading...</p>
+      <span class="service-price">From ₹100</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">💼</span>
+      <h3 class="service-title" id="svc4-title">Work & Co-Working Space</h3>
+      <p class="service-desc" id="svc4-desc">Loading...</p>
+      <span class="service-price">₹200 / half-day</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🎂</span>
+      <h3 class="service-title" id="svc5-title">Private Events</h3>
+      <p class="service-desc" id="svc5-desc">Loading...</p>
+      <span class="service-price">Custom packages</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📦</span>
+      <h3 class="service-title" id="svc6-title">Coffee Subscriptions</h3>
+      <p class="service-desc" id="svc6-desc">Loading...</p>
+      <span class="service-price">From ₹999/month</span>
+    </div>
+  </div>
+
+  <div class="services-ai-note">
+    <div class="ai-loader" id="services-loader" style="color:rgba(253,246,236,0.5)">
+      <div class="dots"><span></span><span></span><span></span></div>
+      Generating your services page intro copy...
+    </div>
+    <p class="ai-text" id="services-ai-text" style="display:none"></p>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section style="background:var(--cream)">
+  <span class="section-tag">Why Brew Haven</span>
+  <h2 class="section-h">The Difference You<br><em>Taste</em></h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-title">Single-Origin Beans</div>
+      <div class="why-desc">Sourced directly from farms in Coorg, Araku and Chikmagalur. Every cup traceable to its origin.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-title">Expert Baristas</div>
+      <div class="why-desc">Trained at SCA-certified schools. Passionate about dialling in the perfect extraction every single time.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-title">Cosy, Curated Space</div>
+      <div class="why-desc">Designed for lingering. Warm lights, quiet corners, fast Wi-Fi and power points at every seat.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-title">Community First</div>
+      <div class="why-desc">We host open-mic nights, reading groups and local artist showcases every weekend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<div class="reviews-section">
+  <span class="section-tag" style="text-align:center;display:block">What Our Guests Say</span>
+  <h2 class="section-h" style="text-align:center;margin-bottom:0.5rem">Loved by <em>Regulars</em></h2>
+  <div class="reviews-rating-bar">
+    <span class="reviews-big-rating">4.9</span>
+    <div>
+      <div class="stars-row">★★★★★</div>
+      <p class="reviews-count">Based on 340+ Google reviews</p>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Brew Haven is my second home. The Araku pour-over is unlike anything I've had in Chennai — complex, smooth, and made with genuine care. And the staff remember your order by your third visit."</p>
+      <div class="review-author">
+        <div class="review-avatar">P</div>
+        <div>
+          <div class="review-name">Priya Subramanian</div>
+          <div class="review-meta">Regular since 2021 · Google Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"I came in to work for an hour and stayed for four. Fast Wi-Fi, perfect ambient noise, and the cinnamon cold brew kept me going all afternoon. Best co-working café in the city, hands down."</p>
+      <div class="review-author">
+        <div class="review-avatar">K</div>
+        <div>
+          <div class="review-name">Karthik Menon</div>
+          <div class="review-meta">Freelancer · Google Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"We booked the private space for our team's quarterly offsite and they handled every detail beautifully. The custom menu, the setup, the warmth of the staff — everything was perfect. We'll be back."</p>
+      <div class="review-author">
+        <div class="review-avatar">A</div>
+        <div>
+          <div class="review-name">Ananya Krishnamurthy</div>
+          <div class="review-meta">Product Lead · Google Review</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-cta-note">
+    <a href="https://g.page/brewhaven/review" class="btn-ghost" target="_blank" rel="noopener">Leave a Review on Google</a>
+  </div>
+</div>
+
+<!-- CTA -->
+<section id="cta">
+  <span class="section-tag">Come Find Us</span>
+  <h2 class="section-h" style="color:var(--cream)">Your Best Cup Is<br>One <em>Visit</em> Away</h2>
+  <p class="section-sub" style="color:rgba(253,246,236,0.6);margin:0 auto 1.5rem;text-align:center;max-width:520px;position:relative">We're open every day from 8 AM — in the heart of Chennai, where the coffee is always fresh and the table always welcoming. Walk in or reserve your spot — we'd love to see you.</p>
+
+  <div class="cta-highlights">
+    <div class="cta-highlight-item">
+      <span class="cta-hi-icon">📍</span>
+      <span class="cta-hi-label">42 Khader Nawaz Khan Road,<br>Nungambakkam, Chennai</span>
+    </div>
+    <div class="cta-highlight-divider"></div>
+    <div class="cta-highlight-item">
+      <span class="cta-hi-icon">🕗</span>
+      <span class="cta-hi-label">Mon – Fri: 8am – 10pm<br>Sat – Sun: 8am – 11pm</span>
+    </div>
+    <div class="cta-highlight-divider"></div>
+    <div class="cta-highlight-item">
+      <span class="cta-hi-icon">📞</span>
+      <span class="cta-hi-label">+91 98765 43210<br>hello@brewhaven.in</span>
+    </div>
+  </div>
+
+  <div class="cta-actions" style="margin-top:2.5rem">
+    <a href="#" class="btn-gold">Reserve a Table</a>
+    <a href="#services" class="btn-outline-light">View Full Menu</a>
+    <a href="tel:+919876543210" class="btn-outline-light">Call Us</a>
+  </div>
+
+  <div style="margin-top:3rem;position:relative">
+    <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,246,236,0.3);text-align:center;margin-bottom:1.5rem">Quick Reservation</p>
+    <div class="booking-form" style="margin:0 auto">
+      <input type="text" placeholder="Your Name" />
+      <input type="tel" placeholder="Phone Number" />
+      <input type="date" style="color:rgba(255,255,255,0.5)" />
+      <select>
+        <option value="" disabled selected>Party Size</option>
+        <option>1–2 guests</option>
+        <option>3–4 guests</option>
+        <option>5–8 guests</option>
+        <option>9+ guests</option>
+      </select>
+      <button class="btn-gold" onclick="handleBooking()">Confirm Reservation</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Brew <span>Haven</span></div>
+  <ul class="footer-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Menu</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 Brew Haven Café · All Rights Reserved</p>
+</footer>
+
+<script>
+const CAFE = {
+  name: "Brew Haven",
+  type: "Artisan Café",
+  location: "Chennai, Tamil Nadu",
+  usp: "single-origin Indian beans, SCA-trained baristas, co-working-friendly space, community events, artisan bakery",
+  tone: "warm, inviting, and story-driven"
+};
+
+async function askClaude(prompt) {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const d = await r.json();
+  return d.content.map(c => c.text || "").join("");
+}
+
+function showText(loaderId, textId, text) {
+  document.getElementById(loaderId).style.display = "none";
+  const el = document.getElementById(textId);
+  el.textContent = text;
+  el.style.display = "block";
+}
+
+// ── ABOUT COPY ──
+async function loadAbout() {
+  const txt = await askClaude(`Write an "About Us" section for ${CAFE.name}, an ${CAFE.type} in ${CAFE.location}.
+USPs: ${CAFE.usp}. Tone: ${CAFE.tone}.
+Include:
+- An opening story paragraph (2–3 sentences, personal and human)
+- A MISSION statement (1 sentence)
+- A community note (1–2 sentences)
+No labels needed. Just flowing copy, around 100 words total.`);
+  showText('about-loader', 'about-ai-text', txt.replace(/\*\*/g,''));
+}
+
+// ── SERVICES COPY ──
+async function loadServices() {
+  const txt = await askClaude(`Write service descriptions for ${CAFE.name} café. Tone: ${CAFE.tone}.
+Write exactly 6 short service descriptions (2 sentences each), one for each:
+1. Signature Espresso Bar
+2. Artisan Bakery
+3. Tea & Wellness Drinks
+4. Work & Co-Working Space
+5. Private Events
+6. Coffee Subscriptions
+Format: just the description text for each, numbered 1–6. No extra headings.`);
+
+  const items = txt.split(/\n/).filter(l => /^\d\./.test(l.trim()));
+  items.forEach((item, i) => {
+    const clean = item.replace(/^\d\.\s*/,'').replace(/\*\*/g,'');
+    const el = document.getElementById(`svc${i+1}-desc`);
+    if (el) el.textContent = clean;
+  });
+
+  const intro = await askClaude(`Write a 2-sentence services page intro for ${CAFE.name} café in ${CAFE.location}. Tone: ${CAFE.tone}. Mention the variety and quality. No labels.`);
+  showText('services-loader', 'services-ai-text', intro.replace(/\*\*/g,''));
+}
+
+function handleBooking() {
+  alert("Table reserved! We'll confirm via WhatsApp shortly. See you at Brew Haven ☕");
+}
+
+// ── LOAD ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadAbout();
+  loadServices();
+});
+</script>
+</body>
+</html>
